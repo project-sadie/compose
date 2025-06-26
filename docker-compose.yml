@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.dashboard=true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "5552:8080" 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - sadie_net
+
+  client:
+    image: node:latest
+    volumes:
+      - ./nitro-react:/app
+    networks:
+      - sadie_net
+    working_dir: /app
+    expose:
+      - "5173"
+    command: ["sh", "-c", "npm cache clean --force && rm -rf node_modules package-lock.json && npm i --legacy-peer-deps && npm run start -- --host 0.0.0.0"]
+    labels:
+      - "traefik.http.routers.client.rule=Host(`client.local`)"
+      - "traefik.http.services.client.loadbalancer.server.port=5173"
+
+  frontend:
+    depends_on:
+      - api
+    image: node:latest
+    volumes:
+      - ./www:/app
+    networks:
+      - sadie_net
+    working_dir: /app
+    expose:
+      - "5173"
+    command: ["sh", "-c", "npm cache clean --force && rm -rf node_modules package-lock.json && npm i --legacy-peer-deps && npm run dev"]
+    labels:
+      - "traefik.http.routers.frontend.rule=Host(`www.local`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=5173"
+
+  api:
+    image: golang:latest
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=secret
+      - DB_NAME=sadie
+    expose:
+      - "80"
+    depends_on:
+      - mariadb
+    volumes:
+      - ./api:/app
+    networks:
+      - sadie_net
+    working_dir: /app
+    command: ["sh", "-c", "go run ."]
+    labels:
+      - "traefik.http.routers.api.rule=Host(`api.local`)"
+      - "traefik.http.services.api.loadbalancer.server.port=80"
+
+  mariadb:
+    image: mariadb:latest
+    ports:
+      - "5556:3306"
+    environment:
+      - MARIADB_ROOT_PASSWORD=secret
+      - MARIADB_DATABASE=sadie
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - sadie_net
+
+  server:
+    build:
+      context: SadieEmulator
+      dockerfile: Dockerfile
+    environment:
+      - SADIE_CONNECTION_STRING=server=mariadb;port=3306;database=sadie;user=root;password=secret
+    volumes:
+      - ./SadieEmulator:/app
+    networks:
+      - sadie_net
+    working_dir: /app
+    command: |
+      sh -c "
+        dotnet ef database update --project Sadie.Migrations --startup-project Sadie.Console --context SadieMigrationsContext &&
+        cd /app/Sadie.Console &&
+        dotnet run
+      "
+    depends_on:
+      - mariadb
+    labels:
+      - "traefik.enable=false"
+
+volumes:
+  mysql_data:
+
+networks:
+  sadie_net:
+    driver: bridge
+
