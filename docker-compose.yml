@@ -20,7 +20,7 @@ services:
   client:
     image: node:latest
     volumes:
-      - ./nitro-react:/app
+      - ../nitro-react:/app
     networks:
       - sadie_net
     working_dir: /app
@@ -36,7 +36,7 @@ services:
       - api
     image: node:latest
     volumes:
-      - ./www:/app
+      - ../www:/app
     networks:
       - sadie_net
     working_dir: /app
@@ -59,7 +59,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - ./api:/app
+      - ../api:/app
     networks:
       - sadie_net
     working_dir: /app
@@ -82,12 +82,12 @@ services:
 
   server:
     build:
-      context: SadieEmulator
+      context: ../SadieEmulator
       dockerfile: Dockerfile
     environment:
       - SADIE_CONNECTION_STRING=server=mariadb;port=3306;database=sadie;user=root;password=secret
     volumes:
-      - ./SadieEmulator:/app
+      - ../SadieEmulator:/app
     networks:
       - sadie_net
     working_dir: /app
