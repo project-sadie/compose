@@ -1,0 +1,4 @@
+git clone https://github.com/project-sadie/www ../www
+git clone https://github.com/project-sadie/api ../api
+git clone https://github.com/project-sadie/SadieEmulator ../SadieEmulator
+git clone https://github.com/billsonnn/nitro-react ../nitro-react
