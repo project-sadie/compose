@@ -93,7 +93,6 @@ services:
     working_dir: /app
     command: |
       sh -c "
-        dotnet ef database update --project Sadie.Migrations --startup-project Sadie.Console --context SadieMigrationsContext &&
         cd /app/Sadie.Console &&
         dotnet run
       "
