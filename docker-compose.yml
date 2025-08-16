@@ -9,9 +9,11 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.mysql.address=:3306"
     ports:
       - "80:80"
-      - "5552:8080" 
+      - "5552:8080"
+      - "3306:3306"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -80,8 +82,8 @@ services:
     networks:
       - sadie_net
     labels:
-      - "traefik.http.routers.db.rule=Host(`db.local`)"
-      - "traefik.http.services.db.loadbalancer.server.port=3306"
+      - "traefik.tco.routers.db.rule=Host(`db.local`)"
+      - "traefik.tcp.services.db.loadbalancer.server.port=3306"
 
   server:
     build:
