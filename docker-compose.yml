@@ -80,8 +80,8 @@ services:
     networks:
       - sadie_net
     labels:
-      - "traefik.http.routers.api.rule=Host(`db.local`)"
-      - "traefik.http.services.api.loadbalancer.server.port=3306"
+      - "traefik.http.routers.db.rule=Host(`db.local`)"
+      - "traefik.http.services.db.loadbalancer.server.port=3306"
 
   server:
     build:
@@ -102,8 +102,8 @@ services:
     depends_on:
       - mariadb
     labels:
-      - "traefik.http.routers.api.rule=Host(`server.local`)"
-      - "traefik.http.services.api.loadbalancer.server.port=2096"
+      - "traefik.http.routers.sadie.rule=Host(`server.local`)"
+      - "traefik.http.services.sadie.loadbalancer.server.port=2096"
 
 volumes:
   mysql_data:
