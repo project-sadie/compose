@@ -2,3 +2,8 @@ git clone https://github.com/project-sadie/www ../www
 git clone https://github.com/project-sadie/api ../api
 git clone https://github.com/project-sadie/SadieEmulator ../SadieEmulator
 git clone https://github.com/billsonnn/nitro-react ../nitro-react
+
+mv ../nitro-react/public/renderer-config.json.example ../nitro-react/public/renderer-config.json
+mv ../nitro-react/public/ui-config.json.example ../nitro-react/public/ui-config.json
+
+sed -i 's/website.com/cdn.sadie.pw/g' ../nitro-react/public/renderer-config.json

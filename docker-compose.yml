@@ -99,7 +99,8 @@ services:
     depends_on:
       - mariadb
     labels:
-      - "traefik.enable=false"
+      - "traefik.http.routers.api.rule=Host(`server.local`)"
+      - "traefik.http.services.api.loadbalancer.server.port=2096"
 
 volumes:
   mysql_data:
