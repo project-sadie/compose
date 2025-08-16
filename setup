@@ -7,3 +7,7 @@ mv ../nitro-react/public/renderer-config.json.example ../nitro-react/public/rend
 mv ../nitro-react/public/ui-config.json.example ../nitro-react/public/ui-config.json
 
 sed -i 's/website.com/cdn.sadie.pw/g' ../nitro-react/public/renderer-config.json
+
+mv ../SadieEmulator/Sadie.Console/appsettings.json.example ../SadieEmulator/Sadie.Console/appsettings.json
+
+docker compose up --build
