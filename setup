@@ -10,4 +10,7 @@ sed -i 's/website.com/cdn.sadie.pw/g' ../nitro-react/public/renderer-config.json
 
 mv ../SadieEmulator/Sadie.Console/appsettings.json.example ../SadieEmulator/Sadie.Console/appsettings.json
 
-docker compose up --build
+sed -i -e 's/Server=127\.0\.0\.1/Server=db.local/g' \
+       -e 's/Pwd=;/Pwd=secret;/g' ../SadieEmulator/Sadie.Console/appsettings.json
+
+echo "Setup has finished, you can now docker compose."
