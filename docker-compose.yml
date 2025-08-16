@@ -9,11 +9,9 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
-      - "--entrypoints.mysql.address=:3306"
     ports:
       - "80:80"
       - "5552:8080"
-      - "3306:3306"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
@@ -81,10 +79,8 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - sadie_net
-    labels:
-      - "traefik.tco.routers.db.rule=Host(`db.local`)"
-      - "traefik.tcp.services.db.loadbalancer.server.port=3306"
-
+    ports:
+      - "3306:3306" 
   server:
     build:
       context: ../SadieEmulator
