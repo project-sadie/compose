@@ -70,8 +70,6 @@ services:
 
   mariadb:
     image: mariadb:latest
-    ports:
-      - "5556:3306"
     environment:
       - MARIADB_ROOT_PASSWORD=secret
       - MARIADB_DATABASE=sadie
