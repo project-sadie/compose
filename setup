@@ -45,5 +45,5 @@ mv ../SadieEmulator/Sadie.Console/appsettings.json.example ../SadieEmulator/Sadi
 sed -i -e 's/Pwd=;/Pwd=secret;/g' ../SadieEmulator/Sadie.Console/appsettings.json \
        -e 's/Server=127.0.0.1;/Server=mariadb;/g' ../SadieEmulator/Sadie.Console/appsettings.json \
 
-docker compose up --d
+docker compose up -d
 
