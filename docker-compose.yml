@@ -79,6 +79,9 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - sadie_net
+    labels:
+      - "traefik.http.routers.api.rule=Host(`db.local`)"
+      - "traefik.http.services.api.loadbalancer.server.port=3306"
 
   server:
     build:
