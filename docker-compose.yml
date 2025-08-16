@@ -50,7 +50,7 @@ services:
   api:
     image: golang:latest
     environment:
-      - DB_HOST=mysql
+      - DB_HOST=mariadb
       - DB_USER=root
       - DB_PASSWORD=secret
       - DB_NAME=sadie
